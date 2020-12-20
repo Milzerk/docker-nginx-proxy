@@ -1,0 +1,26 @@
+version: "3.7" 
+services:
+  # Web service layer
+  nginx:
+    image: nginx:1.13
+    volumes:
+      - "./www:/var/www"
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+    expose:
+      - 80
+    environment:
+      VIRTUAL_HOST: laravel.localhost
+    depends_on:
+      - php_laravel
+
+  # Application service layer
+  php_laravel:
+    build:
+      context: ./php
+    volumes:
+      - "./www:/var/www"
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
